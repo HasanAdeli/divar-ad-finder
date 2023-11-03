@@ -1,14 +1,12 @@
-from time import sleep
 from finder import AdFinder
 
+example_url = 'https://divar.ir/s/tehran/rent-residential'
+example_url_2 = 'https://divar.ir/s/tehran/rent-apartment?credit=100000000-500000000'
+example_url_3 = (
+    'https://divar.ir/s/tehran/car/peugeot/504?brand_model=Peugeot%20Pars%20ELX%20XUM%2CPeugeot%20Pars'
+    '%20ELX-TU5%2CPeugeot%20Pars%20XU7P%2CPeugeot%20Pars%20XU7P-ELX%2CPeugeot%20Pars%20basic%2CPeugeot'
+    '%20Pars%20latest&body_status=intact'
+)
 
-url = 'https://divar.ir/s/tehran/rent-residential'
-finder = AdFinder(url)
-crawling = True
-while crawling:
-    ads = finder.run()
-    for ad in ads:
-        print(ads)
-
-    sleep(30)
-    print('*' * 200)
+finder = AdFinder(url=example_url_3, crawling_time=0.1)
+ads = finder.run()
