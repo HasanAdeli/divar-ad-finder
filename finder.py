@@ -9,9 +9,8 @@ from advertising import Advertising
 class AdFinder:
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0"}
 
-    def __init__(self, url: str, crawling_time: int | float = 1) -> None:
+    def __init__(self, url: str) -> None:
         self.url: str = url
-        self.crawling_time: int = crawling_time * 3600  # Time in hours
         self.advertising = Advertising()
 
     def _send_request(self):
@@ -31,17 +30,24 @@ class AdFinder:
         return self.advertising.find_all_ads(source_code)
 
     def run(self):
-        finish_time = time() + self.crawling_time
+        response = self._send_request()
+        source_code = self._get_source_code(response)
+        ads = self._find_ads(source_code)
+        return ads
 
-        while True:
-            response = self._send_request()
-            source_code = self._get_source_code(response)
-            ads = self._find_ads(source_code)
-            for ad in ads:
-                print(f'title: {ad.get("title")} \n\n url: {ad.get("url")}')
-                print('-' * 200)
-            if time() >= finish_time:
-                return ads
 
-            interval = randint(20, 40)
-            sleep(interval)
+def ad_finder(url: str, crawling_time: int | float = 1):
+    crawling_time *= 3600  # Time in hours
+    finish_time = time() + crawling_time
+    finder = AdFinder(url)
+
+    while time() < finish_time:
+        ads = finder.run()
+        for ad in ads:
+            print(f'title: {ad.get("title")} \n\n url: {ad.get("url")}')
+            print('-' * 200)
+
+        sleep(randint(20, 40))
+        print('*' * 200)
+
+    return ads

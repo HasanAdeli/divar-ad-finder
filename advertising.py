@@ -25,6 +25,7 @@ class Advertising:
         img = self.ad.find('img')
         if img:
             return img.attrs['data-src']
+        return 'https://clipground.com/images/no-image-png-5.jpg'
 
     def find_all_ads(self, source_code):
         ads = self.get_ads(source_code)

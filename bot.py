@@ -1,4 +1,5 @@
 from time import sleep
+from random import randint
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
@@ -11,7 +12,9 @@ from finder import AdFinder
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
-API_TOKEN = "5818946580:AAEfb2VAJj4fhUkE7l5pk24ecfkAIwG_6FQ"
+
+# Your API TOKEN
+API_TOKEN = "Your API TOKEN"
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -25,23 +28,16 @@ async def crawl(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
     url = update.message.text
     finder = AdFinder(url)
-    crawling = 10
-    while crawling > 0:
-        ads = finder.run()
-        for ad in ads:
-            print(ad)
-            message = f'{ad.get("title")} \n {ad.get("url")}'
-            if ad["image"]:
-                try:
-                    await update.message.reply_photo(photo=ad["image"], caption=message)
-                except Exception as err:
-                    print(err)
-            else:
-                await update.message.reply_text(message)
-        crawling -= 1
-        sleep(15)
-        print('*' * 200)
-    await update.message.reply_text(str(user_id))
+    while True:
+        try:
+            ads = finder.run()
+            for ad in ads:
+                message = f'{ad.get("title")} \n\n\n {ad.get("url")}'
+                await update.message.reply_photo(photo=ad["image"], caption=message)
+        except Exception as err:
+            print(err)
+
+        sleep(randint(30, 60))
 
 
 def main() -> None:

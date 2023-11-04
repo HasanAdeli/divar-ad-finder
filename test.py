@@ -1,4 +1,4 @@
-from finder import AdFinder
+from finder import ad_finder
 
 example_url = 'https://divar.ir/s/tehran/rent-residential'
 example_url_2 = 'https://divar.ir/s/tehran/rent-apartment?credit=100000000-500000000'
@@ -8,5 +8,5 @@ example_url_3 = (
     '%20Pars%20latest&body_status=intact'
 )
 
-finder = AdFinder(url=example_url_3, crawling_time=0.1)
-ads = finder.run()
+ads = ad_finder(url=example_url_3, crawling_time=0.5)
+print(ads)
